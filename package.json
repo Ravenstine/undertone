@@ -1,0 +1,26 @@
+{
+  "name": "undertone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "audio-speaker": "^1.5.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.5"
+  },
+  "dependencies": {
+    "buffer": "^5.1.0",
+    "fast-text-encoding": "^1.0.0",
+    "goertzeljs": "^4.2.0",
+    "is-array-buffer": "^1.0.1",
+    "readable-stream": "^2.3.6",
+    "soundrive": "^0.1.0",
+    "text-encoder": "0.0.3",
+    "uint1array": "^1.0.6"
+  }
+}
