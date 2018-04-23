@@ -10,9 +10,9 @@ module.exports = {
   Demodulator,
   Encoder,
   Decoder,
-  modulator: Modulator.modulator,
-  demodulator: Demodulator.demodulator,
-  encoder: Encoder.encoder,
-  decoder: Decoder.decoder
+  modulator:   Modulator.createTransformStream.bind(Modulator),
+  demodulator: Demodulator.createTransformStream.bind(Demodulator),
+  encoder:     Encoder.createTransformStream.bind(Encoder),
+  decoder:     Decoder.createTransformStream.bind(Decoder)
 };
 
