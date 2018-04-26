@@ -2,9 +2,11 @@
 
 const assert              = require('chai').assert,
     { modulator,
+      checksum,
       Demodulator,
       encoder,
       decoder }           = require('../index'),
+    { CRC24 }             = checksum,
     { createReadStream }  = require('fs'),
     { Readable,
       Writable }          = require('stream'),
@@ -62,7 +64,8 @@ describe('undertone', function(){
     };
     source
       .pipe(encoder({
-        preamble: PREAMBLE
+        preamble: PREAMBLE,
+        checksum: CRC24
       }))
       .pipe(modulator({
         frequency:        FREQUENCY,
@@ -77,7 +80,8 @@ describe('undertone', function(){
         step:            STEP
       }))
       .pipe(decoder({
-        preamble: PREAMBLE
+        preamble: PREAMBLE,
+        checksum: CRC24
       }))
       .pipe(destination);
   });
