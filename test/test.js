@@ -1,53 +1,19 @@
 'use strict';
 
 const assert              = require('chai').assert,
-    { modulator,
+    { modulate,
       checksum,
-      Demodulator,
-      encoder,
-      decoder }           = require('../index'),
-    { CRC24 }             = checksum,
+      demodulate,
+      encode,
+      decode }            = require('../index'),
     { createReadStream }  = require('fs'),
     { Readable,
       Writable }          = require('stream'),
-      FREQUENCY           = 18000,
-      DEVIATION           = 100,
+      FREQUENCIES         = [18000, 18500],
       SAMPLE_RATE         = 44100,
       SAMPLES_PER         = 35,
       WINDOW              = SAMPLES_PER,
-      STEP                = Math.round(WINDOW * 0.33),
-      EASE                = ((0.00225 * SAMPLES_PER) / SAMPLE_RATE),
-      PREAMBLE            = Uint8Array.from([ 170, 170, 170 ]).buffer;
-
-class BensDemodulator extends Demodulator {
-  constructor(options={}){
-    const { frequency, deviation } = options,
-          markFreq  = frequency + deviation,
-          spaceFreq = frequency - deviation,
-          carrier   = frequency;
-    options.frequencies = [markFreq, spaceFreq, carrier];
-    super(options);
-    this.markFreq       = markFreq;
-    this.spaceFreq      = spaceFreq;
-    this.carrier        = carrier;
-    this.frequencyCount = 3;
-    this.previous       = -1;
-  }
-  demodulate(frequencyData){
-    const { markFreq, spaceFreq, carrier, previous } = this,
-            greatest = parseInt(frequencyData[this.frequencyCount- 1][0]);
-    let value;
-    if(greatest == markFreq) {
-      value = 1;
-    } else if(greatest == spaceFreq) {
-      value = 0;
-    } else if(greatest == carrier) {
-      value = -1;
-    }
-    this.previous = value;
-    if(value > -1 && previous === -1) this.bitStream.writeBits(value, 1);
-  }
-}
+      STEP                = WINDOW;
 
 describe('undertone', function(){
   it('encodes and decodes an audio signal', function(done){
@@ -63,26 +29,15 @@ describe('undertone', function(){
       done(), next();
     };
     source
-      .pipe(encoder({
-        preamble: PREAMBLE,
-        checksum: CRC24
+      .pipe(encode())
+      .pipe(modulate({
+        frequencies:      FREQUENCIES,
+        samplesPerSymbol: SAMPLES_PER
       }))
-      .pipe(modulator({
-        frequency:        FREQUENCY,
-        deviation:        DEVIATION,
-        samplesPerSymbol: SAMPLES_PER,
-        ease: EASE
+      .pipe(demodulate({
+        frequencies:     FREQUENCIES
       }))
-      .pipe(BensDemodulator.createTransformStream({
-        frequency:       FREQUENCY,
-        deviation:       DEVIATION,
-        windowSize:      WINDOW,
-        step:            STEP
-      }))
-      .pipe(decoder({
-        preamble: PREAMBLE,
-        checksum: CRC24
-      }))
+      .pipe(decode())
       .pipe(destination);
   });
 });

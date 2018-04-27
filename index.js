@@ -13,10 +13,10 @@ module.exports = {
   Encoder,
   Decoder,
   Checksum,
-  modulator:   Modulator.createTransformStream.bind(Modulator),
-  demodulator: Demodulator.createTransformStream.bind(Demodulator),
-  encoder:     Encoder.createTransformStream.bind(Encoder),
-  decoder:     Decoder.createTransformStream.bind(Decoder),
+  modulate:   Modulator.createTransformStream.bind(Modulator),
+  demodulate: Demodulator.createTransformStream.bind(Demodulator),
+  encode:     Encoder.createTransformStream.bind(Encoder),
+  decode:     Decoder.createTransformStream.bind(Decoder),
   checksum: {
     CRC24
   }
