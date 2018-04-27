@@ -5,5 +5,6 @@
   "DEFAULT_STEP":               35,
   "DEFAULT_SWEEP":              0.000000000001,
   "DEFAULT_FREQUENCIES":        [18000, 18500],
+  "DEFAULT_BIT_DEPTH":          "32f",
   "MAX_DATA_LENGTH":            65535
 }

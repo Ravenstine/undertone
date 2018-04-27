@@ -50,5 +50,40 @@ describe('undertone', function(){
       .pipe(decode())
       .pipe(destination);
   });
+  it('ignores packets with different preamble', function(done){
+    const preamble    = Uint8Array.from([1,2,3,4,5,6]).buffer,
+          source1     = new Readable(),
+          source2     = new Readable(),
+          encoder     = encode({ preamble }),
+          decoder     = decode({ preamble }),
+          destination = new Writable();
+    source1._read = function(){
+      this.push('hello world');
+      this.push(null);
+    };
+    source2._read = function(){
+      this.push('goodbye world');
+      this.push(null);
+    }
+    destination._write = function(chunk, encoding, next){
+      const output = String.fromCharCode.apply(null, new Uint8Array(chunk.buffer));
+      assert.notEqual(output, 'hello world');
+      assert.equal(output, 'goodbye world');
+      next();
+    };
+    source1
+      .pipe(encode())
+      .pipe(modulate())
+      .pipe(demodulate())
+      .pipe(decoder)
+      .pipe(destination);
+    source2
+      .pipe(encoder)
+      .pipe(modulate())
+      .pipe(demodulate())
+      .pipe(decoder)
+      .pipe(destination)
+      .on('finish', () => done());
+  });
 });
 
