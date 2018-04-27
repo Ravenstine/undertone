@@ -1,0 +1,9 @@
+{
+  "DEFAULT_SAMPLE_RATE":        44100,
+  "DEFAULT_WINDOW":             35,
+  "DEFAULT_SAMPLES_PER_SYMBOL": 35,
+  "DEFAULT_STEP":               35,
+  "DEFAULT_SWEEP":              0.000000000001,
+  "DEFAULT_FREQUENCIES":        [18000, 18500],
+  "MAX_DATA_LENGTH":            65535
+}

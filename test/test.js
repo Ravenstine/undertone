@@ -8,12 +8,8 @@ const assert              = require('chai').assert,
       decode }            = require('../index'),
     { createReadStream }  = require('fs'),
     { Readable,
-      Writable }          = require('stream'),
-      FREQUENCIES         = [18000, 18500],
-      SAMPLE_RATE         = 44100,
-      SAMPLES_PER         = 35,
-      WINDOW              = SAMPLES_PER,
-      STEP                = WINDOW;
+      Writable }          = require('stream');
+
 
 describe('undertone', function(){
   it('encodes and decodes an audio signal', function(done){
@@ -30,13 +26,8 @@ describe('undertone', function(){
     };
     source
       .pipe(encode())
-      .pipe(modulate({
-        frequencies:      FREQUENCIES,
-        samplesPerSymbol: SAMPLES_PER
-      }))
-      .pipe(demodulate({
-        frequencies:     FREQUENCIES
-      }))
+      .pipe(modulate())
+      .pipe(demodulate())
       .pipe(decode())
       .pipe(destination);
   });
