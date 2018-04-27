@@ -5,23 +5,18 @@ Simple, composable audio signal encoding & decoding with Node.js streams.
 
 ## Usage
 
-This is a hypothetical example.  This library is int his early days so everything may change drastically.
+The stream transforms can work with no configuration, relying on some basic defaults.
+
+This example waits to receive a packet containing a string with the word "Ping" and encodes a responding packet with the word "Pong": 
 
 ```javascript
-const { modulator,
-        demodulator,
-        encoder, 
-        decoder }           = require('undertone'),
+const { modulate,
+        demodulate,
+        encode, 
+        decode }           = require('undertone'),
       { createReadStream,
         createWriteStream } = require('fs'),
       { Transform }         = require('stream');
-        Goertzel            = require('./lib/signal-processors/goertzel'),
-        FREQUENCY   = 18000,
-        DEVIATION   = 100,
-        SAMPLE_RATE = 44100,
-        SAMPLES_PER = 50,
-        EASE        = ((0.00225 * SAMPLES_PER) / SAMPLE_RATE),
-        PREAMBLE    = Uint8Array.from([ 170, 170, 170 ]).buffer;
 
 const source      = new Readable(),
       destination = new Writable();
@@ -39,25 +34,11 @@ t._transform = function(chunk, encoding, next){
 };
 
 createReadStream('inputsamples.bin')
-  .pipe(demodulator({
-    signalProcessor: Goertzel,
-    frequency:       FREQUENCY,
-    deviation:       DEVIATION,
-    windowSize:      SAMPLES_PER
-  }))
-  .pipe(decoder({
-    preamble: PREAMBLE
-  }))
+  .pipe(demodulate())
+  .pipe(decode())
   .pipe(t)
-  .pipe(encoder({
-    preamble: PREAMBLE
-  }))
-  .pipe(modulator({
-    frequency:     FREQUENCY,
-    deviation:     DEVIATION,
-    samplesPerBit: SAMPLES_PER,
-    ease: EASE
-  }))
+  .pipe(encode())
+  .pipe(modulate())
   .pipe(createWriteStream('outputsamples.bin');
 ```
 
