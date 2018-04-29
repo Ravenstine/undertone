@@ -41,14 +41,17 @@ describe('undertone', function(){
     destination._write = function(chunk, encoding, next){
       const output = String.fromCharCode.apply(null, new Uint8Array(chunk.buffer));
       assert.equal(output, expectations.shift());
-      done(), next();
+      next();
     };
     source
       .pipe(encode())
       .pipe(modulate())
       .pipe(demodulate())
       .pipe(decode())
-      .pipe(destination);
+      .pipe(destination)
+      .on('finish', function(){
+        done();
+      });
   });
   it('ignores packets with different preamble', function(done){
     const preamble    = Uint8Array.from([1,2,3,4,5,6]).buffer,

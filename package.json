@@ -9,8 +9,13 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "audio-speaker": "^1.5.0",
+    "audiobuffer": "^0.2.0",
     "chai": "^4.1.2",
-    "mocha": "^5.0.5"
+    "mic": "^2.1.2",
+    "mic-stream": "file:../mic-stream",
+    "mocha": "^5.0.5",
+    "pcm-util": "^3.0.0"
   },
   "dependencies": {
     "bit-buffer": "^0.2.3",
