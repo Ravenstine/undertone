@@ -5,7 +5,7 @@ const assert              = require('chai').assert,
     { Demodulator,
       demodulate,
       decode }            = require('./index'),
-    { Writable }         = require('readable-stream'),
+    { Writable }          = require('readable-stream'),
     { createReadStream }  = require('fs'),
       SAMPLE_RATE         = 44100;
 
@@ -51,6 +51,4 @@ mic({
 }))
 .pipe(decode())
 .pipe(w);
-
-
 

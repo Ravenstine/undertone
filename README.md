@@ -56,8 +56,8 @@ mic({
   rate: 44100,
   encoding: 'floating-point' // This is important, assuming you're using sox/rec.
 }).getAudioStream()
-  .pipe(decode())
   .pipe(demodulate())
+  .pipe(decode())
   .pipe(destination);
 ```
 
